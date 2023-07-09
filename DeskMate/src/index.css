@@ -1,0 +1,248 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cantarell:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+@layer base {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Chivo", "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
+    font-weight: bold;
+  }
+
+  h1 {
+    @apply text-2xl;
+  }
+
+  h2 {
+    @apply text-xl;
+  }
+
+  h3 {
+    @apply text-lg;
+  }
+
+  h4 {
+    @apply text-base;
+  }
+
+  h5 {
+    @apply text-sm;
+  }
+
+  h6 {
+    @apply text-xs;
+  }
+
+  body {
+    margin: 0;
+    line-height: inherit;
+    font-family: "Cantarell", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+      "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: rgba(253, 240, 213, 0.1);
+  }
+
+  .bg-gray-200 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgb(31 41 55 / var(--tw-text-opacity));
+  }
+}
+
+.encabezado {
+  font-family: "Exo", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-weight: bolder;
+  font-style: italic;
+}
+
+ul.breadcrumb li+li::before {
+  content: "\276F";
+  padding-left: 8px;
+  padding-right: 4px;
+  color: inherit;
+}
+
+ul.breadcrumb li span {
+  opacity: 60%;
+}
+
+#sidebar {
+  -webkit-transition: all 300ms cubic-bezier(0, 0.77, 0.58, 1);
+  transition: all 300ms cubic-bezier(0, 0.77, 0.58, 1);
+}
+
+#sidebar.show {
+  transform: translateX(0);
+}
+
+#sidebar ul li a.active {
+  background: #7e503c;
+  background-color: #fdf0d5;
+  color: #22120b;
+}
+
+#sidebar ul li a:hover {
+  background-color: rgba(253, 240, 213, 0.2);
+  color: #ffffff;
+}
+
+#navbar {
+  background: #7e503c;
+}
+
+#sidebar {
+  background: #7e503c;
+}
+
+.bg-azul {
+  color: #ffffff;
+  background-color: #0b3954;
+}
+
+.bg-azul-2 {
+  color: #ffffff;
+  background-color: #045962;
+}
+
+.bg-azul-2-200 {
+  color: #22120b;
+  --tw-bg-opacity: 0.2;
+  background-color: rgb(4 89 98 / var(--tw-bg-opacity));
+}
+
+.bg-azul-2-900 {
+  color: #ffffff;
+  --tw-bg-opacity: 0.9;
+  background-color: rgb(4 89 98 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-azul-2:hover {
+  color: #ffffff;
+  background-color: #045962;
+}
+
+.hover\:bg-azul-2-300:hover {
+  color: #22120b;
+  --tw-bg-opacity: 0.3;
+  background-color: rgb(4 89 98 / var(--tw-bg-opacity));
+}
+
+.focus\:border-azul-2-500:focus {
+  --tw-border-opacity: 0.5;
+  border-color: rgb(4 89 98 / var(--tw-border-opacity));
+}
+
+.bg-azul-3 {
+  background-color: #00bdb9;
+}
+
+.bg-azul-3-500 {
+  --tw-bg-opacity: 0.5;
+  background-color: rgb(0 189 185 / var(--tw-bg-opacity));
+}
+
+.bg-black {
+  background-color: #000000;
+}
+
+.bg-beige {
+  background-color: #fdf0d5;
+}
+
+.text-blue {
+  color: #0b3954;
+}
+
+.center {
+  text-align: -webkit-center;
+}
+
+.datos {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 10px;
+  max-width: 300px;
+}
+
+.datos p {
+  @apply text-5xl;
+}
+
+.h-banner {
+  height: 90px;
+}
+
+.graphic {
+  width: 90vw;
+  height: 70vh;
+}
+
+@media (min-width: 768px) {
+  .graphic {
+    width: 80vw;
+    height: 50vh;
+  }
+}
+
+.image {
+  max-width: 300px;
+}
+
+.centrar {
+  align-self: center;
+}
+
+#banner {
+  display: contents;
+  content: initial;
+}
+
+#navlink {
+  color: #fdf0d5 !important;
+}
+
+#botonera {
+  display: grid;
+  place-items: center;
+}
+#btTime{
+  display: inline-block;
+  text-align: center;
+}
+.botones{
+  display: flex;
+  justify-content: space-evenly;
+  .comenzar{
+    background: #7e503c;
+  }
+  .detener{
+    background: #7e503c;
+  }
+}
+.derecha {
+  text-align-last: right;
+}
+
+.pb-0 {
+  padding-bottom: 0px;
+
+}
