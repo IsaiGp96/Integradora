@@ -17,8 +17,9 @@ function App() {
               <Route path="/Temperatura" element={<Temperatura />} />
               <Route path="/Tiempo" element={<Tiempo />} />
               <Route path="/Base" element={<Base />} />
+              <Route path="/" element={<Content />} />
             </Routes>
-          <Content />
+         
         </header>
       </div>
     </Router>

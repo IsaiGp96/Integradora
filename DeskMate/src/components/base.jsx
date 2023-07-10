@@ -57,43 +57,36 @@ const Base = () => {
           <h1>Ajuste de la base</h1>
           <img src={angulo} alt="Ángulo" className="image p-6 centrar" />
           <div className="w-96 rounded border bg-white p-2 shadow centrar">
-            {!open && (
-              <div className="flex items-center justify-between">
-                <div className="ml-2">{inputValue}</div>
-                <button
-                  type="button"
-                  className="btn rounded bg-azul-2-200 px-4 py-2 font-medium hover:bg-azul-2-300"
-                  onClick={handleEditClick}
-                >
-                  {open ? "Cancel" : "Edit"}
-                </button>
-              </div>
-            )}
-            
-              <div className="flex items-center justify-between">
-                <input
-                  type="text"
-                  className="mr-4 w-full rounded border bg-gray-100 p-2 focus:border-azul-2-500 focus:outline-none"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                />
+            <div className="flex items-center justify-between">
+            <button
+                className="font-semibold border-l bg-blue-700 hover:bg-blue-600 text-white border-gray-400 h-full w-20 flex rounded-r focus:outline-none cursor-pointer"
+                onClick={handleDecreaseClick}
+              >
+                <span className="m-auto">-</span>
+              </button>
+              <input
+                type="text"
+                className="mr-4 w-full rounded border bg-gray-100 p-2 focus:border-azul-2-500 focus:outline-none"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+              />
 
-                <button
-                  className="font-semibold border-l bg-blue-700 hover:bg-blue-600 text-white border-gray-400 h-full w-20 flex rounded-r focus:outline-none cursor-pointer"
-                  onClick={handleIncreaseClick}
+              <button
+                className="font-semibold border-l bg-blue-700 hover:bg-blue-600 text-white border-gray-400 h-full w-20 flex rounded-r focus:outline-none cursor-pointer"
+                onClick={handleIncreaseClick}
+              >
+                <span className="m-auto">+</span>
+              </button>
+              <div className="absolute flex flex-col p-2 w-32 md:w-full mt-6 md:mt-8 mt-10 flex items-start justify-center">
+                <svg
+                  width="10"
+                  height="10"
+                  className="fill-current ml-5 md:mx-auto"
                 >
-                  <span className="m-auto">+</span>
-                </button>
-                <div className="absolute flex flex-col p-2 w-32 md:w-full mt-6 md:mt-8 mt-10 flex items-start justify-center">
-                  <svg
-                    width="10"
-                    height="10"
-                    className="fill-current ml-5 md:mx-auto"
-                  >
-                    <polygon points="0 10, 10 10, 5 0" />
-                  </svg>
-                </div>
+                  <polygon points="0 10, 10 10, 5 0" />
+                </svg>
               </div>
+            </div>
           </div>),
         </div>
       </card>
