@@ -5,6 +5,7 @@ const Tiempo = () => {
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [tiempo, setTiempo] = useState({ horas: 0, minutos: 0, segundos: 0 });
 
   useEffect(() => {
@@ -42,11 +43,24 @@ const Tiempo = () => {
   const handleStartClick = () => {
     setStartTime(new Date());
     setIsRunning(true);
+    setIsPaused(false);
   };
+
+
+  const handlePauseClick = () => {
+    setIsRunning(false);
+    setIsPaused(true);
+  }
+
+  const handleResumeClick = () => {
+    setIsRunning(true);
+    setIsPaused(false);
+  }
 
   const handleStopClick = () => {
     setStartTime(null);
     setIsRunning(false);
+    setIsPaused(false);
     setElapsedTime(0);
     setTiempo({ horas: 0, minutos: 0, segundos: 0 });
   };
@@ -148,10 +162,9 @@ const Tiempo = () => {
           <div className="botones">
             <button
               className="comenzar hover:bg-azul-2 text-white font-bold py-2 px-4 rounded-full"
-              onClick={handleStartClick}
-              disabled={isRunning}
+              onClick={isRunning? handlePauseClick: (isPaused? handleResumeClick: handleStartClick)}
             >
-              Comenzar
+              {isRunning? "Pausar": (isPaused? "Reanudar": "Comenzar")}
             </button>
             <button
               className="detener hover:bg-azul-2 text-white font-bold py-2 px-4 rounded-full"
