@@ -13,6 +13,7 @@
     "connect": "^3.7.0",
     "connect-history-api-fallback": "^2.0.0",
     "connect-logger": "^0.0.1",
+    "firebase": "^10.0.0",
     "flowbite": "^1.6.6",
     "flowbite-react": "^0.4.9",
     "react": "^18.2.0",

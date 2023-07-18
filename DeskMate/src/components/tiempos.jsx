@@ -1,7 +1,52 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment-timezone";
+import { db } from "../utils/firebase";
+import { onValue, ref } from "firebase/database";
 
 const Tiempo = () => {
+  const pageSize = 5;
+  const [sessions, setSessions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [numberOfPages, setNumberOfPages] = useState(0);
+  const [currentDataDisplayed, setCurrentDataDisplayed] = useState({sessions: [],});
+  const [previousAllowed, setPreviousAllowed] = useState(false);
+  const [nextAllowed, setNextAllowed] = useState(true);
+  const columns = ["No. de sesión", "Fecha", "Hora de inicio", "Hora de término", "Tiempo"];
+
+  useEffect(() => {
+    const query = ref(db, "Tiempo");
+
+    return onValue(query, (snapshot) => {
+      const data = snapshot.val();
+
+      if (snapshot.exists()) {
+        setSessions(Object.values(data));
+        setNumberOfPages(Math.ceil(data?.length / pageSize));
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    sessions &&
+      setCurrentDataDisplayed(() => {
+        const page = sessions.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+        return { sessions: page };
+      });
+    setPreviousAllowed(() => currentPage > 1);
+    setNextAllowed(() => currentPage < numberOfPages);
+  }, [currentPage, sessions]);
+
+  const handlePagination = (action) => {
+    if (action === "prev") {
+      if (!previousAllowed) return;
+      setCurrentPage((prevState) => (prevState -= 1));
+    }
+    if (action === "next") {
+      if (!nextAllowed) return;
+      setCurrentPage((prevState) => (prevState += 1));
+    }
+  };
+
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -66,7 +111,7 @@ const Tiempo = () => {
   };
 
   const currentDateTime = moment()
-    .tz("Mazatlan/Chihuahua")
+    .tz("America/Mazatlan")
     .format("YYYY-MM-DDTHH:mm");
 
   return (
@@ -79,72 +124,59 @@ const Tiempo = () => {
               <table className="w-full">
                 <thead>
                   <tr className="text-md font-semibold tracking-wide text-left bg-azul-3-500 border-b border-gray-600">
-                    <th className="px-4 py-3">No. de sesión</th>
-                    <th className="px-4 py-3">Fecha</th>
-                    <th className="px-4 py-3">Hora de inicio</th>
-                    <th className="px-4 py-3">Hora de término</th>
-                    <th className="px-4 py-3">Tiempo</th>
+                    {columns.map((column) => (
+                      <th className="px-4 py-3" key={column}>{column}</th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  <tr>
-                    <td className="px-4 py-3 text-ms border">1</td>
-                    <td className="px-4 py-3 text-ms border">09/05/2023</td>
-                    <td className="px-4 py-3 text-ms border">8:39</td>
-                    <td className="px-4 py-3 text-ms border">9:58</td>
-                    <td className="px-4 py-3 text-ms font-semibold border">
-                      1:19
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-ms border">2</td>
-                    <td className="px-4 py-3 text-ms border">20/06/2022</td>
-                    <td className="px-4 py-3 text-ms border">14:18</td>
-                    <td className="px-4 py-3 text-ms border">19:38</td>
-                    <td className="px-4 py-3 text-ms font-semibold border">
-                      5:20
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-ms border">3</td>
-                    <td className="px-4 py-3 text-ms border">21/03/2023</td>
-                    <td className="px-4 py-3 text-ms border">16:07</td>
-                    <td className="px-4 py-3 text-ms border">21:06</td>
-                    <td className="px-4 py-3 text-ms font-semibold border">
-                      4:59
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-ms border">4</td>
-                    <td className="px-4 py-3 text-ms border">29/06/2022</td>
-                    <td className="px-4 py-3 text-ms border">0:55</td>
-                    <td className="px-4 py-3 text-ms border">11:20</td>
-                    <td className="px-4 py-3 text-ms font-semibold border">
-                      10:25
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-ms border">5</td>
-                    <td className="px-4 py-3 text-ms border">06/05/2022</td>
-                    <td className="px-4 py-3 text-ms border">5:56</td>
-                    <td className="px-4 py-3 text-ms border">11:43</td>
-                    <td className="px-4 py-3 text-ms font-semibold border">
-                      5:47
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-ms border">6</td>
-                    <td className="px-4 py-3 text-ms border">07/10/2022</td>
-                    <td className="px-4 py-3 text-ms border">14:06</td>
-                    <td className="px-4 py-3 text-ms border">14:40</td>
-                    <td className="px-4 py-3 text-ms font-semibold border">
-                      0:34
-                    </td>
-                  </tr>
+                  {currentDataDisplayed
+                    ? currentDataDisplayed.sessions?.map((session, index) => (
+                        <tr key={index}>
+                          <td className="px-4 py-3 text-ms border">{session.Id}</td>
+                          <td className="px-4 py-3 text-ms border">{session.Fecha}</td>
+                          <td className="px-4 py-3 text-ms border">{session.Hora_inicio}</td>
+                          <td className="px-4 py-3 text-ms border">{session.Hora_fin}</td>
+                          <td className="px-4 py-3 text-ms font-semibold border">{session.Tiempo_op}</td>
+                        </tr>
+                      ))
+                    : null}
                 </tbody>
               </table>
             </div>
           </div>
+          <div>
+            <div className="botones">
+              <button
+                className="comenzar hover:bg-azul-2 text-white font-bold py-2 px-4 rounded-full"
+                onClick={() => handlePagination("prev")}
+              >
+                Previous
+              </button>
+              <div>
+                <p>
+                  Mostrando{" "}
+                  <span>{pageSize * (currentPage - 1) + 1}</span>{" "}
+                  -{" "}
+                  <span>
+                    {currentDataDisplayed &&
+                      currentDataDisplayed.sessions &&
+                      currentDataDisplayed.sessions.length +
+                        (currentPage - 1) * pageSize}
+                  </span>{" "}
+                  de <span>{sessions?.length}</span>{" "}
+                  resultados
+                </p>
+              </div>
+              <button
+                className="detener hover:bg-azul-2 text-white font-bold py-2 px-4 rounded-full"
+                onClick={() => handlePagination("next")}
+              >
+                Next
+              </button>
+            </div>
+          </div> 
+          <br />
         </section>
         <div id="btTime" className="bg-azul-3-500 rounded-lg py-6 p-3">
           <div>
