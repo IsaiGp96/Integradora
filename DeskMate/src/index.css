@@ -118,6 +118,7 @@ ul.breadcrumb li span {
 }
 
 .bg-azul-2 {
+  font-family: font-sans;
   color: #ffffff;
   background-color: #045962;
 }
@@ -231,12 +232,12 @@ ul.breadcrumb li span {
 .botones{
   display: flex;
   justify-content: space-evenly;
-  .comenzar{
-    background: #7e503c;
-  }
-  .detener{
-    background: #7e503c;
-  }
+}
+.comenzar{
+  background: #7e503c;
+}
+.detener{
+  background: #7e503c;
 }
 .derecha {
   text-align-last: right;

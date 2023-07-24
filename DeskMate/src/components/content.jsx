@@ -29,8 +29,9 @@ const Content = () => {
                             <div className="center">
                                 <div className="datos">
                                     <FontAwesomeIcon icon={faClock} size="5x" />
-                                    <p>0:00</p>
+                                    
                                 </div>
+                                <p>0:00</p>
                                 <br />
                                 {/* Barra de progreso */}
                                 <div className="mb-2 flex gap-2">

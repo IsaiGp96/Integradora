@@ -4,6 +4,7 @@ import Content from "./components/content.jsx";
 import Temperatura from "./components/temperaturas.jsx";
 import Tiempo from "./components/tiempos.jsx";
 import Base from "./components/base.jsx";
+import Lanucz from "./components/lanucz.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
               <Route path="/Tiempo" element={<Tiempo />} />
               <Route path="/Base" element={<Base />} />
               <Route path="/" element={<Content />} />
+              <Route path="/Lanucz" element={<Lanucz />} />
             </Routes>
          
         </header>
