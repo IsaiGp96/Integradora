@@ -138,9 +138,9 @@ const Temperatura = () => {
     };
 
     return (
-        <div className="mt-20 p-6 pb-0">
+        <div className="mt-20 p-6">
             <card className="flex flex-col max-w-6xl mx-auto space-y-4 ">
-                <div className="flex items-center justify-center py-8 px-4">
+                <div className="flex items-center justify-center px-4">
                     <div className="flex flex-col justify-between h-full">
                         <div>
                             <div className="lg:flex w-full justify-between">

@@ -3,7 +3,7 @@ import angulo from "../img/angulo.png";
 
 const Base = () => {
   const [open, setOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("Hafiz Haziq");
+  const [inputValue, setInputValue] = useState("0");
 
   const handleEditClick = () => {
     setOpen(!open);
@@ -30,7 +30,7 @@ const Base = () => {
     };
   }, []);
 
-  const grados = ["25", "35", "45"];
+  const grados = ["0", "25", "35", "45"];
 
   const grado = () => {
     return grados[0];
@@ -56,38 +56,29 @@ const Base = () => {
         <div className="flex flex-col justify-between h-full">
           <h1>Ajuste de la base</h1>
           <img src={angulo} alt="Ángulo" className="image p-6 centrar" />
-          <div className="w-96 rounded border bg-white p-2 shadow centrar">
+          <div className="rounded border bg-white p-2 shadow centrar">
             <div className="flex items-center justify-between">
-            <button
-                className="font-semibold border-l bg-blue-700 hover:bg-blue-600 text-white border-gray-400 h-full w-20 flex rounded-r focus:outline-none cursor-pointer"
+              <button
+                className="font-semibold border-l bg-azul-2-900 hover:bg-azul-2 border-gray-400 h-full w-20 flex rounded-r focus:outline-none cursor-pointer"
                 onClick={handleDecreaseClick}
               >
                 <span className="m-auto">-</span>
               </button>
               <input
                 type="text"
-                className="mr-4 w-full rounded border bg-gray-100 p-2 focus:border-azul-2-500 focus:outline-none"
-                value={inputValue}
+                className="mx-4 w-full rounded border bg-gray-100 p-2 focus:border-azul-2-500 focus:outline-none center"
+                value={inputValue + "°"}
                 onChange={(e) => setInputValue(e.target.value)}
+                disabled
               />
-
               <button
-                className="font-semibold border-l bg-blue-700 hover:bg-blue-600 text-white border-gray-400 h-full w-20 flex rounded-r focus:outline-none cursor-pointer"
+                className="font-semibold border-l bg-azul-2-900 hover:bg-azul-2 border-gray-400 h-full w-20 flex rounded-r focus:outline-none cursor-pointer"
                 onClick={handleIncreaseClick}
               >
                 <span className="m-auto">+</span>
               </button>
-              <div className="absolute flex flex-col p-2 w-32 md:w-full mt-6 md:mt-8 mt-10 flex items-start justify-center">
-                <svg
-                  width="10"
-                  height="10"
-                  className="fill-current ml-5 md:mx-auto"
-                >
-                  <polygon points="0 10, 10 10, 5 0" />
-                </svg>
-              </div>
             </div>
-          </div>),
+          </div>
         </div>
       </card>
     </div>

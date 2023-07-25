@@ -7,9 +7,6 @@ const Content = () => {
     return (
         <div className="mt-20 p-6">
             <card className="flex flex-col max-w-6xl mx-auto space-y-4 ">
-                {/* Banner */}
-                <div id="banner" className="bg-azul rounded-lg h-banner py-6 p-3">
-                </div>
                 {/* Información relevante */}
                 <div className="flex justify-between space-x-5">
                     <div className="flex-col space-y-4 w-full">
@@ -29,9 +26,8 @@ const Content = () => {
                             <div className="center">
                                 <div className="datos">
                                     <FontAwesomeIcon icon={faClock} size="5x" />
-                                    
+                                    <p>0:00</p>
                                 </div>
-                                <p>0:00</p>
                                 <br />
                                 {/* Barra de progreso */}
                                 <div className="mb-2 flex gap-2">

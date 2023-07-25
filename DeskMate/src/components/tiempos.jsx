@@ -151,10 +151,10 @@ const Tiempo = () => {
                 className="comenzar hover:bg-azul-2 text-white font-bold py-2 px-4 rounded-full"
                 onClick={() => handlePagination("prev")}
               >
-                Previous
+                Anterior
               </button>
               <div>
-                <p>
+                <p className="text-center px-2">
                   Mostrando{" "}
                   <span>{pageSize * (currentPage - 1) + 1}</span>{" "}
                   -{" "}
@@ -172,7 +172,7 @@ const Tiempo = () => {
                 className="detener hover:bg-azul-2 text-white font-bold py-2 px-4 rounded-full"
                 onClick={() => handlePagination("next")}
               >
-                Next
+                Siguiente
               </button>
             </div>
           </div> 
