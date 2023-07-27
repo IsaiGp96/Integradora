@@ -3,7 +3,17 @@ import moment from "moment-timezone";
 import { db } from "../utils/firebase";
 import { onValue, ref } from "firebase/database";
 
-const Tiempo = () => {
+const Tiempo = ({
+  startTime,
+  elapsedTime,
+  isRunning,
+  isPaused,
+  tiempo,
+  handleStartClick,
+  handlePauseClick,
+  handleResumeClick,
+  handleStopClick
+}) => {
   const pageSize = 5;
   const [sessions, setSessions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,69 +55,6 @@ const Tiempo = () => {
       if (!nextAllowed) return;
       setCurrentPage((prevState) => (prevState += 1));
     }
-  };
-
-  const [startTime, setStartTime] = useState(null);
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [tiempo, setTiempo] = useState({ horas: 0, minutos: 0, segundos: 0 });
-
-  useEffect(() => {
-    let intervalo = null;
-
-    if (isRunning) {
-      intervalo = setInterval(() => {
-        setTiempo((prevState) => {
-          let segundos = prevState.segundos + 1;
-          let minutos = prevState.minutos;
-          let horas = prevState.horas;
-
-          if (segundos >= 60) {
-            segundos = 0;
-            minutos++;
-
-            if (minutos >= 60) {
-              minutos = 0;
-              horas++;
-            }
-          }
-
-          return { horas, minutos, segundos };
-        });
-      }, 1000);
-    } else {
-      clearInterval(intervalo);
-    }
-
-    return () => {
-      clearInterval(intervalo);
-    };
-  }, [isRunning]);
-
-  const handleStartClick = () => {
-    setStartTime(new Date());
-    setIsRunning(true);
-    setIsPaused(false);
-  };
-
-
-  const handlePauseClick = () => {
-    setIsRunning(false);
-    setIsPaused(true);
-  }
-
-  const handleResumeClick = () => {
-    setIsRunning(true);
-    setIsPaused(false);
-  }
-
-  const handleStopClick = () => {
-    setStartTime(null);
-    setIsRunning(false);
-    setIsPaused(false);
-    setElapsedTime(0);
-    setTiempo({ horas: 0, minutos: 0, segundos: 0 });
   };
 
   const currentDateTime = moment()
@@ -201,7 +148,7 @@ const Tiempo = () => {
             <button
               className="detener hover:bg-azul-2 text-white font-bold py-2 px-4 rounded-full"
               onClick={handleStopClick}
-              disabled={!isRunning}
+              disabled={!isRunning && !isPaused}
             >
               Detener
             </button>

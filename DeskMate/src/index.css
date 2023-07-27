@@ -199,10 +199,11 @@ ul.breadcrumb li span {
 
 .datos {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
   padding: 10px;
-  max-width: 300px;
+  max-width: 400px;
 }
 
 .datos p {
