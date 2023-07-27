@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { db } from "../utils/firebase";
-import { onValue, ref } from "firebase/database";
+import { db2 } from "../utils/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const Lanucz = () => {
 
@@ -11,15 +11,14 @@ const Lanucz = () => {
     const [items, setItems] = useState(null);
 
     useEffect(() => {
-        const getDataFromFirebase = () => {
-            const dataRef = ref(db, 'Descripciones');
-            onValue(dataRef, (snapshot) => {
-                if (snapshot.exists()) {
-                    setItems(snapshot.val());
-                }
-            }, (error) => {
-                console.error("Error al obtener datos desde Firebase:", error);
-            });
+        const getDataFromFirebase = async () => {
+            const dataRef = doc(db2, 'Descripciones', 'HV37fj07NiI77IPpNCP6');
+            const docSnap = await getDoc(dataRef);
+            if (docSnap.exists()) {
+                setItems(docSnap.data());
+            } else {
+                console.log("Error al obtener datos desde Firebase");
+            };
         };
 
         getDataFromFirebase();
@@ -80,28 +79,29 @@ const Lanucz = () => {
                 <section className="bg-white rounded-lg bg-azul">
                     <div className="container mx-auto px-6 py-10">
                         <h2 className="text-center text-xl font-semibold capitalize text-gray-800 dark:text-white lg:text-xl tracking-wide">Historia</h2>
-                        <p className="mt-4 text-justify font-sans tracking-wider text-gray-500 dark:text-gray-300">{historia}</p>
+                        <p className="mt-4 text-justify font-sans tracking-wider text-gray-600 dark:text-gray-300">{historia}</p>
                         <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 xl:mt-12 xl:grid-cols-3 xl:gap-12">
                             <div>
                                 <img className="h-96 w-full rounded-lg object-cover" src="https://images.unsplash.com/photo-1621111848501-8d3634f82336?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1565&q=80" alt />
                                 <h3 className="mt-4 text-lg font-semibold capitalize text-gray-800 dark:text-white">Misión</h3>
-                                <p className="mt-2 text-justify uppercase tracking-wider text-blue-500 dark:text-blue-400">{mision}</p>
+                                <p className="mt-2 text-justify font-sans tracking-wider text-gray-600 dark:text-gray-300">{mision}</p>
                             </div>
                             <div>
                                 <img className="h-96 w-full rounded-lg object-cover" src="https://images.unsplash.com/photo-1621609764180-2ca554a9d6f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80" alt />
                                 <h3 className="mt-4 text-lg font-semibold capitalize text-gray-800 dark:text-white">Visión</h3>
-                                <p className="mt-2 text-justify uppercase tracking-wider text-blue-500 dark:text-blue-400">{vision}</p>
+                                <p className="mt-2 text-justify font-sans tracking-wider text-gray-600 dark:text-gray-300">{vision}</p>
                             </div>
                             <div>
                                 <img className="h-96 w-full rounded-lg object-cover" src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt />
                                 <h3 className="mt-4 text-lg font-semibold capitalize text-gray-800 dark:text-white">Valores</h3>
-                                <ul className="mt-2 uppercase tracking-wider text-blue-500 dark:text-blue-400">
+                                <ul className="mt-2 font-sans tracking-wider text-gray-600 dark:text-gray-300 valores">
                                     {valores.map((valor, index) => <li key={index}>{valor}</li>)}
                                 </ul>
                             </div>
                         </div>
+                        <br />
                         <h2 className="text-center text-xl font-semibold capitalize text-gray-800 dark:text-white lg:text-xl tracking-wide">Políticas</h2>
-                        <p className="mt-4 text-justify font-sans tracking-wider text-gray-500 dark:text-gray-300">{politicas}</p>
+                        <p className="mt-4 text-justify font-sans tracking-wider text-gray-600 dark:text-gray-300">{politicas}</p>
                     </div>
                 </section>
                 <section className="mt-6 rounded-lg bg-white bg-azul">
