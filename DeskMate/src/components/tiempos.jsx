@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment-timezone";
 import { db } from "../utils/firebase";
-import { onValue, ref } from "firebase/database";
+import { onValue, ref, query, orderByChild } from "firebase/database";
 
 const Tiempo = ({
   startTime,
@@ -24,13 +24,13 @@ const Tiempo = ({
   const columns = ["No. de sesión", "Fecha", "Hora de inicio", "Hora de término", "Tiempo"];
 
   useEffect(() => {
-    const query = ref(db, "Tiempo");
+    const q = query(ref(db, "Tiempo"), orderByChild("Id"));
 
-    return onValue(query, (snapshot) => {
+    return onValue(q, (snapshot) => {
       const data = snapshot.val();
 
       if (snapshot.exists()) {
-        setSessions(Object.values(data));
+        setSessions(Object.values(data.reverse()));
         setNumberOfPages(Math.ceil(data?.length / pageSize));
       }
     });

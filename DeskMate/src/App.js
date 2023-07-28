@@ -5,6 +5,9 @@ import Temperatura from "./components/temperaturas.jsx";
 import Tiempo from "./components/tiempos.jsx";
 import Base from "./components/base.jsx";
 import Lanucz from "./components/lanucz.jsx";
+import { db } from "./utils/firebase.js";
+import { onValue, ref, query, orderByChild, limitToLast, set, update } from "firebase/database";
+import moment from "moment-timezone";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -13,6 +16,8 @@ function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [tiempo, setTiempo] = useState({ horas: 0, minutos: 0, segundos: 0 });
+
+  const [lastSession, setLastSession] = useState(0);
 
   useEffect(() => {
     let intervalo = null;
@@ -46,12 +51,49 @@ function App() {
     };
   }, [isRunning]);
 
+  useEffect(()=>{
+    getLastSession();
+  }, []);
+
+  const getLastSession = () => {
+    const q = query(ref(db, "Tiempo"), orderByChild("Id"), limitToLast(1));
+    onValue(q, (snapshot) => {
+      const data = snapshot.val();
+
+      if (snapshot.exists()) {
+        const lastSessionData = Object.values(data);
+        setLastSession(lastSessionData[0].Id);
+      }
+      else {
+        setLastSession(0);
+      }
+    });
+  }
+
+  const newSession = () => {
+    set(ref(db, 'Tiempo/' + (lastSession + 1)), {
+      Fecha: moment().tz("America/Mazatlan").format("DD/MM/YYYY"),
+      Hora_fin: "--:--",
+      Hora_inicio: moment().tz("America/Mazatlan").format("HH:mm"),
+      Id: Number(lastSession + 1),
+      Tiempo_op: "--:--:--",
+    });
+  }
+
+  const updateSession = () => {
+    update(ref(db, 'Tiempo/' + lastSession), {
+      Hora_fin: moment().tz("America/Mazatlan").format("HH:mm"),
+      Tiempo_op: String(tiempo.horas).padStart(2, "0").concat(":", String(tiempo.minutos).padStart(2, "0"), ":", String(tiempo.segundos).padStart(2, "0"))
+    });
+  }
+
   const handleStartClick = () => {
     setStartTime(new Date());
     setIsRunning(true);
     setIsPaused(false);
+    getLastSession();
+    newSession();
   };
-
 
   const handlePauseClick = () => {
     setIsRunning(false);
@@ -64,6 +106,8 @@ function App() {
   }
 
   const handleStopClick = () => {
+    getLastSession();
+    updateSession();
     setStartTime(null);
     setIsRunning(false);
     setIsPaused(false);
