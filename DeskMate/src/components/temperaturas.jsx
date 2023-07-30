@@ -1,43 +1,160 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
+import { db } from "../utils/firebase";
+import { onValue, ref, query, limitToLast, endAt, orderByChild, startAt } from "firebase/database";
+import moment from "moment-timezone";
 
 const Temperatura = () => {
+    const [records, setRecords] = useState([]);
+    const [records2, setRecords2] = useState([]);
+    const [records3, setRecords3] = useState([]);
+    const [days, setDays] = useState([]);
+    const [temperature, setTemperature] = useState(0);
+    const [isSelected, setIsSelected] = useState(false);
+
+    useEffect(()=>{
+        const q = query(ref(db, "Temperatura_prueba"), limitToLast(1));
+
+        onValue(q, (snapshot) => {
+            const data = snapshot.val();
+
+            if (snapshot.exists()) {
+                const lastRecord = Object.values(data);
+                setTemperature(lastRecord[0].Centigrados);
+            }
+        });
+    })
+
+    useEffect(() => {
+        const q = query(ref(db, "Temperatura_prueba"), limitToLast(3));
+
+        onValue(q, (snapshot) => {
+            const data = snapshot.val();
+
+            if (snapshot.exists()) {
+                const results = Object.values(data.reverse());
+                let index2 = 0;
+                let newRecords = [];
+                for (let index = 0; index < results.length; index++) {
+                    if (results[index2].Fecha === moment().tz("America/Mazatlan").subtract(index, "days").format("DD/MM/YYYY").toString()) {
+                        newRecords.unshift(results[index2].Centigrados);
+                        index2++;
+                    }
+                    else {
+                        newRecords.unshift(null);
+                    }
+                }
+                console.log(newRecords);
+                setRecords(newRecords);
+            }
+        });
+    }, [])
+
+    useEffect(() => {
+        daysPerMonth();
+        const q = query(ref(db, "Temperatura_prueba"), orderByChild("Fecha"), startAt(moment().tz("America/Mazatlan").startOf("month").format("DD/MM/YYYY")), endAt(moment().tz("America/Mazatlan").endOf("month").format("DD/MM/YYYY")));
+        let newRecords = [];
+
+        onValue(q, (snapshot) => {
+            const data = snapshot.val();
+            if (snapshot.exists()) {
+                const results = Object.values(data.reverse());
+                let index2 = 0;
+                for (let index = 0; index < results.length; index++) {
+                    if (results[index2].Fecha === moment().tz("America/Mazatlan").subtract(index, "days").format("DD/MM/YYYY").toString()) {
+                        newRecords.unshift(results[index2].Centigrados);
+                        index2++;
+                    }
+                    else {
+                        newRecords.unshift(null);
+                    }
+                }
+                while (newRecords.length !== Number(moment().tz("America/Mazatlan").format("DD"))) {
+                    newRecords.unshift(null);
+                }
+            }
+        });
+        console.log(newRecords);
+        setRecords2(newRecords);
+    },[])
+
+    useEffect(() => {
+        let months = Number(moment().tz("America/Mazatlan").format("MM"));
+        let newRecords = [];
+
+        for (let index2 = 0; index2 < months; index2++) {
+            const q = query(ref(db, "Temperatura_prueba"),
+                orderByChild("Fecha"),
+                startAt(moment().tz("America/Mazatlan").subtract(index2, "month").startOf("month").format("DD/MM/YYYY")),
+                endAt(moment().tz("America/Mazatlan").subtract(index2, "month").endOf("month").format("DD/MM/YYYY")));
+
+            onValue(q, (snapshot) => {
+                const data = snapshot.val();
+
+                if (snapshot.exists()) {
+                    const results = Object.values(data);
+                    let suma = 0;
+                    let cont = 0;
+
+                    for (let index = 0; index < results.length; index++) {
+                        if ((results[index].Fecha).substring(3) === moment().tz("America/Mazatlan").subtract(index2, "month").format("MM/YYYY").toString()){
+                            suma = suma + Number(results[index].Centigrados);
+                            cont++;
+                        }
+                    }
+
+                    if (cont !== 0) {
+                        newRecords.unshift(suma / cont);
+                    } else {
+                        newRecords.unshift(null);
+                    }
+                }
+            });
+        }
+
+        console.log(newRecords);
+        setRecords3(newRecords);
+    }, [])
+
+    const daysPerMonth = () => {
+        const number = moment().tz("America/Mazatlan").daysInMonth();
+        let values = [];
+        for (let index = 1; index <= number; index++) {
+            values.push(index);
+        }
+        setDays(values);
+    }
+
     const chartRef = useRef(null);
     const [selectedMode, setSelectedMode] = useState("");
     const chartDataRef = useRef({});
 
     chartDataRef.current = {
-        Modo: {
+        "Tres días": {
             labels: ["Anteayer", "Ayer", "Hoy"],
-            data: [null, 34, 50],
+            data: records,
         },
         Año: {
             labels: [
-                "Jan",
-                "Feb",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec",
+                "Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre",
             ],
-            data: [60, 40, 62, 30, 20, 60, 23, 30, 20, 20, 10, 120],
+            data: records3,
         },
         Mes: {
-            labels: [
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-                21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-            ],
-            data: [
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-                21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-            ],
+            labels: days,
+            data: records2,
         },
     };
 
@@ -48,7 +165,7 @@ const Temperatura = () => {
         head.appendChild(script);
 
         let chart = null;
-
+        
         const newData = chartDataRef.current;
 
         if (chartRef.current && selectedMode) {
@@ -92,37 +209,7 @@ const Temperatura = () => {
                 chartRef.current.chart = chart;
             }
         }
-        else {
-            chart = new Chart(chartRef.current, {
-                type: "line",
-                data: {
-                    labels: newData["Modo"].labels,
-                    datasets: [
-                        {
-                            label: "Temperatura",
-                            borderColor: "#0B3954",
-                            data: newData["Modo"].data,
-                            fill: false,
-                            pointBackgroundColor: "#0B3954",
-                            borderWidth: "3",
-                            pointBorderWidth: "4",
-                            pointHoverRadius: "6",
-                            pointHoverBorderWidth: "8",
-                            pointHoverBorderColor: "rgb(74,85,104,0.2)",
-                        },
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false,
-                    },
-                },
-            });
-
-            chartRef.current.chart = chart;
-        }
+        
 
         return () => {
             head.removeChild(script);
@@ -135,6 +222,7 @@ const Temperatura = () => {
     const handleModeChange = (e) => {
         const selectedMode = e.target.value;
         setSelectedMode(selectedMode);
+        setIsSelected(true);
     };
 
     return (
@@ -154,7 +242,8 @@ const Temperatura = () => {
                                                 value={selectedMode}
                                                 onChange={handleModeChange}
                                             >
-                                                <option className="leading-1">Modo</option>
+                                                <option className="leading-1" selected>Modo</option>
+                                                <option className="leading-1">Tres días</option>
                                                 <option className="leading-1">Año</option>
                                                 <option className="leading-1">Mes</option>
                                             </select>
@@ -164,17 +253,21 @@ const Temperatura = () => {
                             </div>
                         </div>
                         <div className="mt-6 graphic">
-                            <canvas
-                                ref={chartRef}
-                                id="myChart"
-                                role="img"
-                                aria-label="line graph to show selling overview in terms of months and numbers"
-                            ></canvas>
+                            {isSelected && selectedMode!=="Modo" ? (
+                                <canvas
+                                    ref={chartRef}
+                                    id="myChart"
+                                    role="img"
+                                    aria-label="line graph to show selling overview in terms of months and numbers"
+                                ></canvas>
+                            ) : (
+                                <p className="datos text-xl">Por favor seleccione una opción</p>
+                            )}
                         </div>
                     </div>
                 </div>
                 <div className="bg-azul rounded-lg py-6 p-3">
-                    <h4>Temperatura actual: <span className="text-white/75">0.00°C</span></h4>
+                    <h4>Temperatura actual: <span className="text-white/75">{temperature}°C</span></h4>
                 </div>
             </card>
         </div>

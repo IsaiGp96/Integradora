@@ -1,7 +1,9 @@
 import React from "react";
-import Temperatura from "./temperaturas";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock, faTemperatureThreeQuarters, faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
+import { db } from "../utils/firebase";
+import { onValue, ref, query, limitToLast } from "firebase/database";
+import { useEffect, useState } from 'react';
 
 const Content = ({
     startTime,
@@ -14,6 +16,21 @@ const Content = ({
     handleResumeClick,
     handleStopClick
 }) => {
+    const [temperature, setTemperature] = useState(0);
+
+    useEffect(()=>{
+        const q = query(ref(db, "Temperatura_prueba"), limitToLast(1));
+
+        onValue(q, (snapshot) => {
+            const data = snapshot.val();
+
+            if (snapshot.exists()) {
+                const lastRecord = Object.values(data);
+                setTemperature(lastRecord[0].Centigrados);
+            }
+        });
+    })
+
     return (
         <div className="mt-20 p-6">
             <card className="flex flex-col max-w-6xl mx-auto space-y-4 ">
@@ -26,7 +43,7 @@ const Content = ({
                             <div className="center">
                                 <div className="datos">
                                     <FontAwesomeIcon icon={faTemperatureThreeQuarters} size="5x" />
-                                    <p>00°</p>
+                                    <p>{temperature}°</p>
                                 </div>
                             </div>
                         </div>
@@ -50,10 +67,10 @@ const Content = ({
                                     <span className={`mb-2 h-[15px] flex-1 rounded-xl ${tiempo.minutos >= 26 || tiempo.horas > 0? "bg-black": "bg-azul-3"}`}></span>
                                     <span className={`mb-2 h-[15px] flex-1 rounded-xl ${tiempo.minutos >= 40 || tiempo.horas > 0? "bg-black": "bg-azul-3"}`}></span>
                                     <span className={`mb-2 h-[15px] flex-1 rounded-xl ${tiempo.minutos >= 53 || tiempo.horas > 0? "bg-black": "bg-azul-3"}`}></span>
-                                    <span className={`mb-2 h-[15px] flex-1 rounded-xl ${tiempo.horas > 0? tiempo.horas == 1? tiempo.minutos >= 6? "bg-black": "bg-azul-3" :"bg-black": "bg-azul-3"}`}></span>
-                                    <span className={`mb-2 h-[15px] flex-1 rounded-xl ${tiempo.horas > 0? tiempo.horas == 1? tiempo.minutos >= 20? "bg-black": "bg-azul-3" :"bg-black": "bg-azul-3"}`}></span>
-                                    <span className={`mb-2 h-[15px] flex-1 rounded-xl ${tiempo.horas > 0? tiempo.horas == 1? tiempo.minutos >= 33? "bg-black": "bg-azul-3" :"bg-black": "bg-azul-3"}`}></span>
-                                    <span className={`mb-2 h-[15px] flex-1 rounded-xl ${tiempo.horas > 0? tiempo.horas == 1? tiempo.minutos >= 46? "bg-black": "bg-azul-3" :"bg-black": "bg-azul-3"}`}></span>
+                                    <span className={`mb-2 h-[15px] flex-1 rounded-xl ${tiempo.horas > 0? tiempo.horas === 1? tiempo.minutos >= 6? "bg-black": "bg-azul-3" :"bg-black": "bg-azul-3"}`}></span>
+                                    <span className={`mb-2 h-[15px] flex-1 rounded-xl ${tiempo.horas > 0? tiempo.horas === 1? tiempo.minutos >= 20? "bg-black": "bg-azul-3" :"bg-black": "bg-azul-3"}`}></span>
+                                    <span className={`mb-2 h-[15px] flex-1 rounded-xl ${tiempo.horas > 0? tiempo.horas === 1? tiempo.minutos >= 33? "bg-black": "bg-azul-3" :"bg-black": "bg-azul-3"}`}></span>
+                                    <span className={`mb-2 h-[15px] flex-1 rounded-xl ${tiempo.horas > 0? tiempo.horas === 1? tiempo.minutos >= 46? "bg-black": "bg-azul-3" :"bg-black": "bg-azul-3"}`}></span>
                                 </div>
                             </div>
                         </div>
