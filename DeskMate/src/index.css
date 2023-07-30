@@ -300,3 +300,7 @@ ul.breadcrumb li span {
   list-style: circle;
   list-style-position: inside;
 }
+#inclinacion{
+  align-self: center;
+  justify-content: center;
+}

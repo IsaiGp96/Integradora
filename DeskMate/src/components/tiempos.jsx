@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment-timezone";
+import { db, set } from "../utils/firebase";
 import { db } from "../utils/firebase";
 import { onValue, ref, query, orderByChild } from "firebase/database";
 
@@ -35,6 +36,14 @@ const Tiempo = ({
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (tiempo.horas === 2) {
+      const ledsRef = ref(db, 'sensor');
+      set(ledsRef, "1");
+      setTimeout(() => set(ledsRef, "0"), 10000);
+    }
+}, [tiempo.horas]);
 
   useEffect(() => {
     sessions &&
@@ -159,4 +168,4 @@ const Tiempo = ({
   );
 };
 
-export default Tiempo;
+export default Tiempo;
