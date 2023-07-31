@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock, faTemperatureThreeQuarters, faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
 import { db } from "../utils/firebase";
-import { onValue, ref, query, limitToLast } from "firebase/database";
+import { onValue, ref } from "firebase/database";
 import { useEffect, useState } from 'react';
 
 const Content = ({
@@ -19,14 +19,14 @@ const Content = ({
     const [temperature, setTemperature] = useState(0);
 
     useEffect(()=>{
-        const q = query(ref(db, "Temperatura_prueba"), limitToLast(1));
+        const q = ref(db, "Temperatura");
 
         onValue(q, (snapshot) => {
             const data = snapshot.val();
 
             if (snapshot.exists()) {
                 const lastRecord = Object.values(data);
-                setTemperature(lastRecord[0].Centigrados);
+                setTemperature(lastRecord[0]);
             }
         });
     })

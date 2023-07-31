@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 import { db } from "../utils/firebase";
-import { onValue, ref, query, limitToLast, endAt, orderByChild, startAt } from "firebase/database";
+import { onValue, ref, query, limitToLast, endAt, orderByChild, startAt, update, set } from "firebase/database";
 import moment from "moment-timezone";
 
 const Temperatura = () => {
@@ -11,19 +11,51 @@ const Temperatura = () => {
     const [records3, setRecords3] = useState([]);
     const [days, setDays] = useState([]);
     const [temperature, setTemperature] = useState(0);
+    const [lastDate, setLastDate] = useState("");
+    const [lastId, setLastId] = useState(-1);
     const [isSelected, setIsSelected] = useState(false);
 
+    useEffect(() => {
+        const q = ref(db, "Temperatura");
+
+        onValue(q, (snapshot) => {
+            const data = snapshot.val();
+
+            if (snapshot.exists()) {
+                const newRecord = Object.values(data);
+                setTemperature(newRecord[0]);
+            }
+        });
+    })
+
     useEffect(()=>{
-        const q = query(ref(db, "Temperatura_prueba"), limitToLast(1));
+        const q = query(ref(db, "Temperatura_prueba"), orderByChild("Id"), limitToLast(1));
 
         onValue(q, (snapshot) => {
             const data = snapshot.val();
 
             if (snapshot.exists()) {
                 const lastRecord = Object.values(data);
-                setTemperature(lastRecord[0].Centigrados);
+                setLastDate(lastRecord[0].Fecha);
+                setLastId(lastRecord[0].Id);
             }
         });
+    })
+
+    useEffect(() => {
+        if (lastId !== -1) {
+            if (lastDate === moment().tz("America/Mazatlan").format("DD/MM/YYYY").toString()) {
+                update(ref(db, 'Temperatura_prueba/' + lastId), {
+                    Centigrados: temperature
+                });
+            } else {
+                set(ref(db, 'Temperatura_prueba/' + (lastId + 1)), {
+                    Centigrados: temperature,
+                    Fecha: moment().tz("America/Mazatlan").format("DD/MM/YYYY"),
+                    Id: Number(lastId + 1),
+                });
+            }
+        }
     })
 
     useEffect(() => {
