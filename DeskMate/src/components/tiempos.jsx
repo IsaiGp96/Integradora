@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment-timezone";
 import { db, set } from "../utils/firebase";
-import { db } from "../utils/firebase";
 import { onValue, ref, query, orderByChild } from "firebase/database";
 
 const Tiempo = ({
@@ -25,14 +24,16 @@ const Tiempo = ({
   const columns = ["No. de sesión", "Fecha", "Hora de inicio", "Hora de término", "Tiempo"];
 
   useEffect(() => {
-    const q = query(ref(db, "Tiempo"), orderByChild("Id"));
+    const q = query(ref(db, "Tiempo_registros"), orderByChild("Id"));
 
     return onValue(q, (snapshot) => {
       const data = snapshot.val();
 
       if (snapshot.exists()) {
-        setSessions(Object.values(data.reverse()));
-        setNumberOfPages(Math.ceil(data?.length / pageSize));
+        if (data !== "") {
+          setSessions(Object.values(data.reverse()));
+          setNumberOfPages(Math.ceil((data?.length-1) / pageSize));
+        }
       }
     });
   }, []);
@@ -106,13 +107,14 @@ const Tiempo = ({
               <button
                 className="comenzar hover:bg-azul-2 text-white font-bold py-2 px-4 rounded-full"
                 onClick={() => handlePagination("prev")}
+                disabled={!previousAllowed}
               >
                 Anterior
               </button>
               <div>
                 <p className="text-center px-2">
                   Mostrando{" "}
-                  <span>{pageSize * (currentPage - 1) + 1}</span>{" "}
+                  <span>{sessions.length !== 0? pageSize * (currentPage - 1) + 1: sessions.length}</span>{" "}
                   -{" "}
                   <span>
                     {currentDataDisplayed &&
@@ -127,6 +129,7 @@ const Tiempo = ({
               <button
                 className="detener hover:bg-azul-2 text-white font-bold py-2 px-4 rounded-full"
                 onClick={() => handlePagination("next")}
+                disabled={!nextAllowed}
               >
                 Siguiente
               </button>

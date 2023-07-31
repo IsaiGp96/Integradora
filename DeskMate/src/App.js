@@ -56,11 +56,11 @@ function App() {
   }, []);
 
   const getLastSession = () => {
-    const q = query(ref(db, "Tiempo"), orderByChild("Id"), limitToLast(1));
+    const q = query(ref(db, "Tiempo_registros"), orderByChild("Id"), limitToLast(1));
     onValue(q, (snapshot) => {
       const data = snapshot.val();
 
-      if (snapshot.exists()) {
+      if (snapshot.exists() && data !== "") {
         const lastSessionData = Object.values(data);
         setLastSession(lastSessionData[0].Id);
       }
@@ -71,7 +71,7 @@ function App() {
   }
 
   const newSession = () => {
-    set(ref(db, 'Tiempo/' + (lastSession + 1)), {
+    set(ref(db, 'Tiempo_registros/' + (lastSession + 1)), {
       Fecha: moment().tz("America/Mazatlan").format("DD/MM/YYYY"),
       Hora_fin: "--:--",
       Hora_inicio: moment().tz("America/Mazatlan").format("HH:mm"),
@@ -81,7 +81,7 @@ function App() {
   }
 
   const updateSession = () => {
-    update(ref(db, 'Tiempo/' + lastSession), {
+    update(ref(db, 'Tiempo_registros/' + lastSession), {
       Hora_fin: moment().tz("America/Mazatlan").format("HH:mm"),
       Tiempo_op: String(tiempo.horas).padStart(2, "0").concat(":", String(tiempo.minutos).padStart(2, "0"), ":", String(tiempo.segundos).padStart(2, "0"))
     });
