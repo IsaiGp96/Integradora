@@ -20,7 +20,6 @@ const Lanucz = () => {
                 console.log("Error al obtener datos desde Firebase");
             };
         };
-
         getDataFromFirebase();
     }, []);
 
@@ -29,6 +28,8 @@ const Lanucz = () => {
     const vision = items && items.Vision ? items.Vision : '';
     const politicas = items && items.Politicas ? items.Politicas : '';
     const valores = items && items.Valores ? items.Valores : [];
+    const integrantes = items && items.Integrantes ? items.Integrantes : [];
+    const puestos = items && items.Puestos ? items.Puestos : [];
 
     useEffect(() => {
         const wordWrapper = document.getElementById('word');
@@ -36,17 +37,15 @@ const Lanucz = () => {
             setWordWrapperContent(wordWrapper.innerHTML);
             let counter = 0;
             let addingWord = false;
-
             const interval = setInterval(() => {
                 if (wordWrapperContent.length > 15 && !addingWord) {
                     setWordWrapperContent(wordWrapper.innerHTML);
                 } else {
                     addingWord = true;
                 }
-
                 if (addingWord) {
                     if (wordWrapperContent.length < words[counter].length) {
-                        wordWrapper.innerHTML = words[counter].slice(0, wordWrapperContent.length + 1); 
+                        wordWrapper.innerHTML = words[counter].slice(0, wordWrapperContent.length + 1);
                         setWordWrapperContent(wordWrapper.innerHTML);
                     } else {
                         if (counter < words.length) {
@@ -58,7 +57,6 @@ const Lanucz = () => {
                     }
                 }
             }, 20);
-
             return () => clearInterval(interval);
         }
     }, [wordWrapperContent, addingWord]);
@@ -105,6 +103,7 @@ const Lanucz = () => {
                     </div>
                 </section>
                 <section className="mt-6 rounded-lg bg-white bg-azul">
+
                     <div className="rounded-lg">
                         <div className="container mx-auto px-6 pt-8">
                             <h2 className="text-center text-xl font-semibold  text-gray-800 dark:text-white lg:text-xl">Miembros del equipo</h2>
@@ -118,9 +117,13 @@ const Lanucz = () => {
                     <div className="container mx-auto px-6 pt-0 pb-6">
                         <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
                             <div className="flex flex-col items-center rounded-xl p-4 bg-white-60 sm:p-6">
-                                <img className="aspect-square w-full rounded-xl object-cover" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" alt />
-                                <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">Alan Enrique</h3>
-                                <p className="mt-2 capitalize text-gray-800">Diseño electrónico/backend</p>
+                                <img className="aspect-square w-full rounded-xl object-cover" src="../pinguinos/Pinguino09.png" />
+                                {integrantes.length > 0 && (
+                                    <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">{integrantes[0]}</h3>
+                                )}
+                                {puestos.length > 0 && (
+                                    <p className="mt-2 capitalize text-gray-800">{puestos[1]}</p>
+                                )}
                                 <div className="-mx-2 mt-3 flex">
                                     <a href="#" className="mx-2 text-gray-800 transition-colors duration-300 hover:text-gray-600" aria-label="Reddit">
                                         <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -138,8 +141,10 @@ const Lanucz = () => {
                             </div>
                             <div className="flex flex-col items-center rounded-xl p-4 bg-white-60 sm:p-6">
                                 <img className="aspect-square w-full rounded-xl object-cover" src="https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80" alt />
-                                <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">Samantha Martínez</h3>
-                                <p className="mt-2 capitalize text-gray-800">Full Stack Developer</p>
+                                <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">{integrantes[2]}</h3>
+
+                                <p className="mt-2 capitalize text-gray-800">{puestos[0]}</p>
+
                                 <div className="-mx-2 mt-3 flex">
                                     <a href="#" className="mx-2 text-gray-800 transition-colors duration-300 hover:text-gray-600" aria-label="Reddit">
                                         <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -157,8 +162,8 @@ const Lanucz = () => {
                             </div>
                             <div className="flex flex-col items-center rounded-xl p-4 bg-white-60 sm:p-6">
                                 <img className="aspect-square w-full rounded-xl object-cover" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" alt />
-                                <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">Abraham García</h3>
-                                <p className="mt-2 capitalize text-gray-800">Full stack developer</p>
+                                <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">{integrantes[1]}</h3>
+                                <p className="mt-2 capitalize text-gray-800">{puestos[0]}</p>
                                 <div className="-mx-2 mt-3 flex">
                                     <a href="#" className="mx-2 text-gray-800 transition-colors duration-300 hover:text-gray-600" aria-label="Reddit">
                                         <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -176,8 +181,8 @@ const Lanucz = () => {
                             </div>
                             <div className="flex flex-col items-center rounded-xl p-4 bg-white-60 sm:p-6">
                                 <img className="aspect-square w-full rounded-xl object-cover" src="https://images.unsplash.com/photo-1598439210625-5067c578f3f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8a2luZyUyMHBlbmd1aW58ZW58MHx8MHx8fDA%3D&w=1000&q=80" alt />
-                                <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">Carlos Díaz</h3>
-                                <p className="mt-2 capitalize text-gray-800">Frontend developer</p>
+                                <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">{integrantes[3]}</h3>
+                                <p className="mt-2 capitalize text-gray-800">{puestos[2]}</p>
                                 <div className="-mx-2 mt-3 flex">
                                     <a href="#" className="mx-2 text-gray-800 transition-colors duration-300 hover:text-gray-600" aria-label="Reddit">
                                         <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -198,44 +203,10 @@ const Lanucz = () => {
                 </section>
                 <footer className="mt-3.5 rounded-lg bg-white dark:bg-gray-900">
                     <div className="container  mx-auto px-6 py-12">
-                        <div className="md:-mx-3 md:flex md:items-center md:justify-between">
-                            <h1 className="text-2xl font-semibold tracking-tight text-gray-800 dark:text-white md:mx-3">Subscribe our newsletter to get update.</h1>
-                            <div className="mt-6 shrink-0 md:mx-3 md:mt-0 md:w-auto">
-                                <a href="#" className="inline-flex w-full items-center justify-center rounded-lg bg-gray-800 px-4 py-2 text-sm text-white duration-300 hover:bg-gray-700 focus:ring focus:ring-gray-300 focus:ring-opacity-80">
-                                    <span className="mx-2">Sign Up Now</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="mx-2 h-6 w-6">
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
                         <hr className="my-6 border-gray-200 dark:border-gray-700 md:my-10" />
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                             <div>
-                                <p className="font-semibold text-gray-800 dark:text-white">Quick Link</p>
-                                <div className="mt-5 flex flex-col items-start space-y-2">
-                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">Home</a>
-                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">Who We Are</a>
-                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">Our Philosophy</a>
-                                </div>
-                            </div>
-                            <div>
-                                <p className="font-semibold text-gray-800 dark:text-white">Industries</p>
-                                <div className="mt-5 flex flex-col items-start space-y-2">
-                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">Retail &amp; E-Commerce</a>
-                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">Information Technology</a>
-                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">Finance &amp; Insurance</a>
-                                </div>
-                            </div>
-                            <div>
-                                <p className="font-semibold text-gray-800 dark:text-white">Services</p>
-                                <div className="mt-5 flex flex-col items-start space-y-2">
-                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">Translation</a>
-                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">Proofreading &amp; Editing</a>
-                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">Content Creation</a>
-                                </div>
-                            </div>
-                            <div>
-                                <p className="font-semibold text-gray-800 dark:text-white">Contact Us</p>
+                                <p className="font-semibold text-gray-800 dark:text-white">Contactanos</p>
                                 <div className="mt-5 flex flex-col items-start space-y-2">
                                     <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">+880 768 473 4978</a>
                                     <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">info@merakiui.com</a>
@@ -244,13 +215,11 @@ const Lanucz = () => {
                         </div>
                         <hr className="my-6 border-gray-200 dark:border-gray-700 md:my-10" />
                         <div className="flex flex-col items-center justify-between sm:flex-row">
-                            <a href="#" className="text-xl font-bold text-gray-800 transition-colors duration-300 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Brand</a>
                             <p className="mt-4 text-sm text-gray-500 dark:text-gray-300 sm:mt-0">© Copyright 2023. Lanucz Inc.</p>
                         </div>
                     </div>
                 </footer>
             </div>
-
         </div >
     );
 }
