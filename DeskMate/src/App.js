@@ -5,6 +5,7 @@ import Temperatura from "./components/temperaturas.jsx";
 import Tiempo from "./components/tiempos.jsx";
 import Base from "./components/base.jsx";
 import Lanucz from "./components/lanucz.jsx";
+import Alert from "./components/alert.jsx";
 import { db } from "./utils/firebase.js";
 import { onValue, ref, query, orderByChild, limitToLast, set, update } from "firebase/database";
 import moment from "moment-timezone";
@@ -121,6 +122,7 @@ function App() {
         <link href="https://cdn.tailwindcss.com" rel="stylesheet" />
         <header className="App-header">
           <Main />
+          <Alert tiempo={tiempo}/>
             <Routes>
               <Route path="/Temperatura" element={<Temperatura />} />
               <Route path="/Tiempo" element={<Tiempo startTime={startTime} elapsedTime={elapsedTime} isRunning={isRunning} isPaused={isPaused} tiempo={tiempo} handleStartClick={handleStartClick} handlePauseClick={handlePauseClick} handleResumeClick={handleResumeClick} handleStopClick={handleStopClick} />} />

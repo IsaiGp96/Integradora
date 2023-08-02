@@ -304,3 +304,13 @@ ul.breadcrumb li span {
   align-self: center;
   justify-content: center;
 }
+
+.toast {
+  position: fixed;
+  background-color: #22120b;
+  color: #ffffff;
+  border-radius: 4px;
+  max-width: max-content;
+  padding: 10px;
+  right: 0;
+}

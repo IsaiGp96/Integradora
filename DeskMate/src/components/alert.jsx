@@ -1,14 +1,23 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
-const Alert = () => {
-    function mostrarAlerta(){
-        alert("Hola mundo");
-    }
+const Alert = ({
+    tiempo
+}) => {
+    const [alertar, setAlertar] = useState(false);
+
+    useEffect(() => {
+        if (tiempo.horas === 2 && tiempo.minutos === 0 && tiempo.segundos === 0) {
+            setAlertar(true);
+            setTimeout(() => {
+                setAlertar(false);
+            }, 10000);
+        }
+    }, [tiempo])
 
     return (
-        <div>
-            <button onClick={mostrarAlerta} hidden>Mostrar alerta</button>
-        </div>
+        (alertar && <div className="toast">
+            ¡Sesión completada!
+        </div>)
     );
 }
 export default Alert;
