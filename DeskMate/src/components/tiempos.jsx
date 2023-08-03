@@ -18,10 +18,11 @@ const Tiempo = ({
   const [sessions, setSessions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [numberOfPages, setNumberOfPages] = useState(0);
-  const [currentDataDisplayed, setCurrentDataDisplayed] = useState({sessions: [],});
+  const [currentDataDisplayed, setCurrentDataDisplayed] = useState({ sessions: [], });
   const [previousAllowed, setPreviousAllowed] = useState(false);
   const [nextAllowed, setNextAllowed] = useState(true);
   const columns = ["No. de sesión", "Fecha", "Hora de inicio", "Hora de término", "Tiempo"];
+  var valor = 3;
 
   useEffect(() => {
     const q = query(ref(db, "Tiempo_registros"), orderByChild("Id"));
@@ -32,7 +33,7 @@ const Tiempo = ({
       if (snapshot.exists()) {
         if (data !== "") {
           setSessions(Object.values(data.reverse()));
-          setNumberOfPages(Math.ceil((data?.length-1) / pageSize));
+          setNumberOfPages(Math.ceil((data?.length - 1) / pageSize));
         }
       }
     });
@@ -44,7 +45,19 @@ const Tiempo = ({
       set(ledsRef, "1");
       setTimeout(() => set(ledsRef, "0"), 10000);
     }
-}, [tiempo.horas]);
+  }, [tiempo.horas]);
+
+  useEffect(() => {
+    if (tiempo.segundos === 30 || tiempo.segundos === 59) {
+      const timeRef = ref(db, 'alerta');
+      set(timeRef, valor);
+      valor = valor + 1;
+      if (valor == 5) {
+        valor = 3;
+      }
+      setTimeout(() => set(timeRef, "0"), 5000);
+    }
+  }, [tiempo.segundos]);
 
   useEffect(() => {
     sessions &&
@@ -89,14 +102,14 @@ const Tiempo = ({
                 <tbody className="bg-white">
                   {currentDataDisplayed
                     ? currentDataDisplayed.sessions?.map((session, index) => (
-                        <tr key={index}>
-                          <td className="px-4 py-3 text-ms border">{session.Id}</td>
-                          <td className="px-4 py-3 text-ms border">{session.Fecha}</td>
-                          <td className="px-4 py-3 text-ms border">{session.Hora_inicio}</td>
-                          <td className="px-4 py-3 text-ms border">{session.Hora_fin}</td>
-                          <td className="px-4 py-3 text-ms font-semibold border">{session.Tiempo_op}</td>
-                        </tr>
-                      ))
+                      <tr key={index}>
+                        <td className="px-4 py-3 text-ms border">{session.Id}</td>
+                        <td className="px-4 py-3 text-ms border">{session.Fecha}</td>
+                        <td className="px-4 py-3 text-ms border">{session.Hora_inicio}</td>
+                        <td className="px-4 py-3 text-ms border">{session.Hora_fin}</td>
+                        <td className="px-4 py-3 text-ms font-semibold border">{session.Tiempo_op}</td>
+                      </tr>
+                    ))
                     : null}
                 </tbody>
               </table>
@@ -114,13 +127,13 @@ const Tiempo = ({
               <div>
                 <p className="text-center px-2">
                   Mostrando{" "}
-                  <span>{sessions.length !== 0? pageSize * (currentPage - 1) + 1: sessions.length}</span>{" "}
+                  <span>{sessions.length !== 0 ? pageSize * (currentPage - 1) + 1 : sessions.length}</span>{" "}
                   -{" "}
                   <span>
                     {currentDataDisplayed &&
                       currentDataDisplayed.sessions &&
                       currentDataDisplayed.sessions.length +
-                        (currentPage - 1) * pageSize}
+                      (currentPage - 1) * pageSize}
                   </span>{" "}
                   de <span>{sessions?.length}</span>{" "}
                   resultados
@@ -134,7 +147,7 @@ const Tiempo = ({
                 Siguiente
               </button>
             </div>
-          </div> 
+          </div>
           <br />
         </section>
         <div id="btTime" className="bg-azul-3-500 rounded-lg py-6 p-3">
@@ -153,9 +166,9 @@ const Tiempo = ({
           <div className="botones">
             <button
               className="comenzar hover:bg-azul-2 text-white font-bold py-2 px-4 rounded-full"
-              onClick={isRunning? handlePauseClick: (isPaused? handleResumeClick: handleStartClick)}
+              onClick={isRunning ? handlePauseClick : (isPaused ? handleResumeClick : handleStartClick)}
             >
-              {isRunning? "Pausar": (isPaused? "Reanudar": "Comenzar")}
+              {isRunning ? "Pausar" : (isPaused ? "Reanudar" : "Comenzar")}
             </button>
             <button
               className="detener hover:bg-azul-2 text-white font-bold py-2 px-4 rounded-full"
@@ -171,4 +184,4 @@ const Tiempo = ({
   );
 };
 
-export default Tiempo;
+export default Tiempo;
