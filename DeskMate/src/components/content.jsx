@@ -5,6 +5,7 @@ import { db } from "../utils/firebase";
 import { onValue, ref } from "firebase/database";
 import { useEffect, useState } from 'react';
 
+
 const Content = ({
     startTime,
     elapsedTime,
@@ -27,6 +28,9 @@ const Content = ({
             if (snapshot.exists()) {
                 const lastRecord = Object.values(data);
                 setTemperature(lastRecord[0]);
+                if (lastRecord[0]<0) {
+                    setTemperature(0);
+                }
             }
         });
     })
@@ -43,7 +47,7 @@ const Content = ({
                             <div className="center">
                                 <div className="datos">
                                     <FontAwesomeIcon icon={faTemperatureThreeQuarters} size="5x" />
-                                    <p>{temperature}°</p>
+                                    <p>{temperature}°C</p>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +81,7 @@ const Content = ({
                     </div>
                     {/* Apartado para trabajar */}
                     <div className="hidden md:inline-block bg-azul rounded-lg py-6 w-full p-3">
-                        <h2>Estado: Trabajando o no</h2>
+                        <h2>Aquí publicidad</h2>
                         <div className="center">
                             {/* Botón para empezar a trabajar */}
                             <button className="relative group overflow-hidden px-6 py-3 rounded-full flex space-x-2 items-center bg-white hover:bg-beige">
@@ -90,7 +94,7 @@ const Content = ({
                 </div>
                 {/* Apartado para trabajar */}
                 <div className=" md:hidden bg-azul rounded-lg py-6 w-full p-3">
-                    <h3>Estado: Trabajando o no</h3>
+                    <h3>Aquí publicidad</h3>
                     <div className="center">
                         {/* Botón para empezar a trabajar */}
                         <button className="relative group overflow-hidden px-6 py-3 rounded-full flex space-x-2 items-center bg-white hover:bg-beige">
@@ -98,10 +102,11 @@ const Content = ({
                                 <FontAwesomeIcon icon={faPlay} size="5x" /> <FontAwesomeIcon icon={faPause} size="5x" />
                             </span>
                         </button>
+                        
                     </div>
                 </div>
                 <div className="bg-azul-2 rounded-lg py-6 p-3">
-                    <h4>Extras</h4>
+                    <h4>Aquí publicidad</h4>
                     Posiblemente un espacio puramente decorativo
                 </div>
                 <span className="text-right">Powered by Lanucz</span>
