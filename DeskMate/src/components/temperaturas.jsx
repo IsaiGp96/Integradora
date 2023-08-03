@@ -26,7 +26,7 @@ const Temperatura = () => {
                 setTemperature(newRecord[0]);
             }
         });
-    })
+    }, [])
 
     useEffect(()=>{
         const q = query(ref(db, "Temperatura_prueba"), orderByChild("Id"), limitToLast(1));
@@ -39,7 +39,7 @@ const Temperatura = () => {
                 setLastDate(lastRecord[0].Fecha);
                 setLastId(lastRecord[0].Id);
             }
-        });
+        }, {onlyOnce: true});        
     })
 
     useEffect(() => {
@@ -65,7 +65,7 @@ const Temperatura = () => {
             const data = snapshot.val();
 
             if (snapshot.exists()) {
-                const results = Object.values(data.reverse());
+                const results = Object.values(data).reverse();
                 let index2 = 0;
                 let newRecords = [];
                 for (let index = 0; index < results.length; index++) {
@@ -85,15 +85,26 @@ const Temperatura = () => {
 
     useEffect(() => {
         daysPerMonth();
-        const q = query(ref(db, "Temperatura_prueba"), orderByChild("Fecha"), startAt(moment().tz("America/Mazatlan").startOf("month").format("DD/MM/YYYY")), endAt(moment().tz("America/Mazatlan").endOf("month").format("DD/MM/YYYY")));
+        const q = query(
+            ref(db, "Temperatura_prueba"),
+            orderByChild("Fecha"),
+            // limitToLast(Number(moment().tz("America/Mazatlan").format("DD")))
+            startAt(
+                moment().tz("America/Mazatlan").startOf("month").format("DD/MM/YYYY")
+            ),
+            endAt(
+                moment().tz("America/Mazatlan").endOf("month").format("DD/MM/YYYY")
+            )
+        );
         let newRecords = [];
 
         onValue(q, (snapshot) => {
             const data = snapshot.val();
+            
             if (snapshot.exists()) {
-                const results = Object.values(data.reverse());
+                const results = Object.values(data).reverse();
                 let index2 = 0;
-                for (let index = 0; index < results.length; index++) {
+                for (let index = 0; index < Number(moment().tz("America/Mazatlan").format("DD")); index++) {
                     if (results[index2].Fecha === moment().tz("America/Mazatlan").subtract(index, "days").format("DD/MM/YYYY").toString()) {
                         newRecords.unshift(results[index2].Centigrados);
                         index2++;
@@ -102,13 +113,10 @@ const Temperatura = () => {
                         newRecords.unshift(null);
                     }
                 }
-                while (newRecords.length !== Number(moment().tz("America/Mazatlan").format("DD"))) {
-                    newRecords.unshift(null);
-                }
+                console.log(newRecords);
+                setRecords2(newRecords);
             }
         });
-        console.log(newRecords);
-        setRecords2(newRecords);
     },[])
 
     useEffect(() => {
@@ -200,11 +208,8 @@ const Temperatura = () => {
         
         const newData = chartDataRef.current;
 
-        if (chartRef.current && selectedMode) {
-            const modeData = newData[selectedMode];
-
-            if (modeData) {
-                const { labels, data } = modeData;
+        if (chartRef.current && selectedMode && newData[selectedMode]) {
+            const { labels, data } = newData[selectedMode];
 
                 if (chartRef.current.chart) {
                     chartRef.current.chart.destroy();
@@ -240,7 +245,6 @@ const Temperatura = () => {
 
                 chartRef.current.chart = chart;
             }
-        }
         
 
         return () => {
@@ -249,7 +253,7 @@ const Temperatura = () => {
                 chart.destroy();
             }
         };
-    }, [selectedMode]);
+    }, [selectedMode, isSelected]);
 
     const handleModeChange = (e) => {
         const selectedMode = e.target.value;
@@ -259,7 +263,7 @@ const Temperatura = () => {
 
     return (
         <div className="mt-20 p-6">
-            <card className="flex flex-col max-w-6xl mx-auto space-y-4 ">
+            <div className="flex flex-col max-w-6xl mx-auto space-y-4 ">
                 <div className="flex items-center justify-center px-4">
                     <div className="flex flex-col justify-between h-full">
                         <div>
@@ -274,7 +278,7 @@ const Temperatura = () => {
                                                 value={selectedMode}
                                                 onChange={handleModeChange}
                                             >
-                                                <option className="leading-1" selected>Modo</option>
+                                                <option className="leading-1">Modo</option>
                                                 <option className="leading-1">Tres días</option>
                                                 <option className="leading-1">Año</option>
                                                 <option className="leading-1">Mes</option>
@@ -287,7 +291,7 @@ const Temperatura = () => {
                         <div className="mt-6 graphic">
                             {isSelected && selectedMode!=="Modo" ? (
                                 <canvas
-                                    ref={chartRef}
+                                    ref={(ref)=>(chartRef.current = ref)}
                                     id="myChart"
                                     role="img"
                                     aria-label="line graph to show selling overview in terms of months and numbers"
@@ -301,7 +305,7 @@ const Temperatura = () => {
                 <div className="bg-azul rounded-lg py-6 p-3">
                     <h4>Temperatura actual: <span className="text-white/75">{temperature}°C</span></h4>
                 </div>
-            </card>
+            </div>
         </div>
     );
 };
