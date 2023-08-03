@@ -24,6 +24,9 @@ const Temperatura = () => {
             if (snapshot.exists()) {
                 const newRecord = Object.values(data);
                 setTemperature(newRecord[0]);
+                if(newRecord[0] < 0){
+                    setTemperature(0);
+                }
             }
         });
     }, [])

@@ -81,7 +81,7 @@ const Base = () => {
           <div className="rounded border bg-white p-2 shadow centrar">
             <div className="flex items-center justify-between">
               <button
-                className="font-semibold border-l bg-azul-2-900 hover:bg-azul-2 border-gray-400 h-full w-20 flex rounded-r focus:outline-none cursor-pointer"
+                className="font-semibold border-l bg-azul-2-900 hover:bg-azul-2 border-gray-400 h-full w-20 flex rounded-l focus:outline-none cursor-pointer"
                 onClick={handleDecreaseClick}
               >
                 <span className="m-auto">-</span>
@@ -104,7 +104,7 @@ const Base = () => {
           <button
             id={"inclinacion"}
             type="submit"
-            className=" mt-4 font-semibold rounded-lg bg-azul-2-900 hover:bg-azul-2 border-gray-400 h-full w-20 flex rounded-r rounded-l first-letter: focus:outline-none cursor-pointer"
+            className=" mt-4 font-semibold pr-20 pl-20 pb-2 pt-2 rounded-lg bg-azul-2-900 hover:bg-azul-2 border-gray-400 h-full w-20 flex rounded-r rounded-l first-letter: focus:outline-none cursor-pointer"
             onClick={handleSaveClick}
           >
             Aplicar

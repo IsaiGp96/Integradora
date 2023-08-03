@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import Temperatura from "./temperaturas";
 import Tiempo from "./tiempos";
 import Base from "./base";
-import { Link } from "react-router-dom";
+import { Link, useLocation} from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faBars} from '@fortawesome/free-solid-svg-icons'
 
+
 const Main = () => {
-  const [componenteActual, setComponenteActual] = useState("Desk Mate");
+  const useLocate = useLocation();
+  const [componenteActual, setComponenteActual] = useState(useLocate.pathname.substring(1));
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
