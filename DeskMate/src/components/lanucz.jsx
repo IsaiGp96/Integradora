@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { db2 } from "../utils/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import Alan from "../img/Pinguino 11.png";
+import Abraham from "../img/Pinguino 03.png";
+import Sam from "../img/Pinguino 12.png";
+import Carlos from "../img/Pinguino 08.png";
+
 
 const Lanucz = () => {
 
@@ -117,7 +122,7 @@ const Lanucz = () => {
                     <div className="container mx-auto px-6 pt-0 pb-6">
                         <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
                             <div className="flex flex-col items-center rounded-xl p-4 bg-white-60 sm:p-6">
-                                <img className="aspect-square w-full rounded-xl object-cover" src="../pinguinos/Pinguino09.png" />
+                                <img className="aspect-square w-full rounded-xl object-cover" src={Alan} />
                                 {integrantes.length > 0 && (
                                     <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">{integrantes[0]}</h3>
                                 )}
@@ -140,7 +145,7 @@ const Lanucz = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col items-center rounded-xl p-4 bg-white-60 sm:p-6">
-                                <img className="aspect-square w-full rounded-xl object-cover" src="https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80" alt />
+                                <img className="aspect-square w-full rounded-xl object-cover" src={Sam} alt />
                                 <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">{integrantes[2]}</h3>
 
                                 <p className="mt-2 capitalize text-gray-800">{puestos[0]}</p>
@@ -161,7 +166,7 @@ const Lanucz = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col items-center rounded-xl p-4 bg-white-60 sm:p-6">
-                                <img className="aspect-square w-full rounded-xl object-cover" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" alt />
+                                <img className="aspect-square w-full rounded-xl object-cover" src={Abraham} alt />
                                 <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">{integrantes[1]}</h3>
                                 <p className="mt-2 capitalize text-gray-800">{puestos[0]}</p>
                                 <div className="-mx-2 mt-3 flex">
@@ -180,7 +185,7 @@ const Lanucz = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col items-center rounded-xl p-4 bg-white-60 sm:p-6">
-                                <img className="aspect-square w-full rounded-xl object-cover" src="https://images.unsplash.com/photo-1598439210625-5067c578f3f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8a2luZyUyMHBlbmd1aW58ZW58MHx8MHx8fDA%3D&w=1000&q=80" alt />
+                                <img className="aspect-square w-full rounded-xl object-cover" src={Carlos} alt />
                                 <h3 className="mt-4 text-lg font-semibold capitalize text-gray-900">{integrantes[3]}</h3>
                                 <p className="mt-2 capitalize text-gray-800">{puestos[2]}</p>
                                 <div className="-mx-2 mt-3 flex">
@@ -204,12 +209,12 @@ const Lanucz = () => {
                 <footer className="mt-3.5 rounded-lg bg-white dark:bg-gray-900">
                     <div className="container  mx-auto px-6 py-12">
                         <hr className="my-6 border-gray-200 dark:border-gray-700 md:my-10" />
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                            <div>
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
+                            <div className=''>
                                 <p className="font-semibold text-gray-800 dark:text-white">Contactanos</p>
                                 <div className="mt-5 flex flex-col items-start space-y-2">
-                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">+880 768 473 4978</a>
-                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">info@merakiui.com</a>
+                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">+52 614-123-45-67</a>
+                                    <a href="#" className="text-gray-600 transition-colors duration-300 hover:text-blue-500 hover:underline dark:text-gray-300 dark:hover:text-blue-400">deskmate@ino.com</a>
                                 </div>
                             </div>
                         </div>

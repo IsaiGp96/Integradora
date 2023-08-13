@@ -10,6 +10,9 @@ import {faBars} from '@fortawesome/free-solid-svg-icons'
 const Main = () => {
   const useLocate = useLocation();
   const [componenteActual, setComponenteActual] = useState(useLocate.pathname.substring(1));
+  if(componenteActual == ""){
+    setComponenteActual("Inicio");
+  }
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {

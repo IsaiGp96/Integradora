@@ -24,14 +24,14 @@ const Temperatura = () => {
             if (snapshot.exists()) {
                 const newRecord = Object.values(data);
                 setTemperature(newRecord[0]);
-                if(newRecord[0] < 0){
+                if (newRecord[0] < 0) {
                     setTemperature(0);
                 }
             }
         });
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         const q = query(ref(db, "Temperatura_prueba"), orderByChild("Id"), limitToLast(1));
 
         onValue(q, (snapshot) => {
@@ -42,7 +42,7 @@ const Temperatura = () => {
                 setLastDate(lastRecord[0].Fecha);
                 setLastId(lastRecord[0].Id);
             }
-        }, {onlyOnce: true});        
+        }, { onlyOnce: true });
     })
 
     useEffect(() => {
@@ -103,7 +103,7 @@ const Temperatura = () => {
 
         onValue(q, (snapshot) => {
             const data = snapshot.val();
-            
+
             if (snapshot.exists()) {
                 const results = Object.values(data).reverse();
                 let index2 = 0;
@@ -115,12 +115,15 @@ const Temperatura = () => {
                     else {
                         newRecords.unshift(null);
                     }
+                    if (newRecords.length > Number(moment().tz("America/Mazatlan").format("DD"))) {
+                        newRecords.pop();
+                    }
                 }
                 console.log(newRecords);
                 setRecords2(newRecords);
             }
         });
-    },[])
+    }, [])
 
     useEffect(() => {
         let months = Number(moment().tz("America/Mazatlan").format("MM"));
@@ -141,7 +144,7 @@ const Temperatura = () => {
                     let cont = 0;
 
                     for (let index = 0; index < results.length; index++) {
-                        if ((results[index].Fecha).substring(3) === moment().tz("America/Mazatlan").subtract(index2, "month").format("MM/YYYY").toString()){
+                        if ((results[index].Fecha).substring(3) === moment().tz("America/Mazatlan").subtract(index2, "month").format("MM/YYYY").toString()) {
                             suma = suma + Number(results[index].Centigrados);
                             cont++;
                         }
@@ -151,6 +154,9 @@ const Temperatura = () => {
                         newRecords.unshift(suma / cont);
                     } else {
                         newRecords.unshift(null);
+                    }
+                    if (newRecords.length > months) {
+                        newRecords.pop();
                     }
                 }
             });
@@ -208,47 +214,47 @@ const Temperatura = () => {
         head.appendChild(script);
 
         let chart = null;
-        
+
         const newData = chartDataRef.current;
 
         if (chartRef.current && selectedMode && newData[selectedMode]) {
             const { labels, data } = newData[selectedMode];
 
-                if (chartRef.current.chart) {
-                    chartRef.current.chart.destroy();
-                }
-
-                chart = new Chart(chartRef.current, {
-                    type: "line",
-                    data: {
-                        labels: labels || [],
-                        datasets: [
-                            {
-                                label: "Temperatura",
-                                borderColor: "#0B3954",
-                                data: data || [],
-                                fill: false,
-                                pointBackgroundColor: "#0B3954",
-                                borderWidth: "3",
-                                pointBorderWidth: "4",
-                                pointHoverRadius: "6",
-                                pointHoverBorderWidth: "8",
-                                pointHoverBorderColor: "rgb(74,85,104,0.2)",
-                            },
-                        ],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        legend: {
-                            display: false,
-                        },
-                    },
-                });
-
-                chartRef.current.chart = chart;
+            if (chartRef.current.chart) {
+                chartRef.current.chart.destroy();
             }
-        
+
+            chart = new Chart(chartRef.current, {
+                type: "line",
+                data: {
+                    labels: labels || [],
+                    datasets: [
+                        {
+                            label: "Temperatura",
+                            borderColor: "#0B3954",
+                            data: data || [],
+                            fill: false,
+                            pointBackgroundColor: "#0B3954",
+                            borderWidth: "3",
+                            pointBorderWidth: "4",
+                            pointHoverRadius: "6",
+                            pointHoverBorderWidth: "8",
+                            pointHoverBorderColor: "rgb(74,85,104,0.2)",
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false,
+                    },
+                },
+            });
+
+            chartRef.current.chart = chart;
+        }
+
 
         return () => {
             head.removeChild(script);
@@ -292,9 +298,9 @@ const Temperatura = () => {
                             </div>
                         </div>
                         <div className="mt-6 graphic">
-                            {isSelected && selectedMode!=="Modo" ? (
+                            {isSelected && selectedMode !== "Modo" ? (
                                 <canvas
-                                    ref={(ref)=>(chartRef.current = ref)}
+                                    ref={(ref) => (chartRef.current = ref)}
                                     id="myChart"
                                     role="img"
                                     aria-label="line graph to show selling overview in terms of months and numbers"

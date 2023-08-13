@@ -40,12 +40,20 @@ const Tiempo = ({
   }, []);
 
   useEffect(() => {
-    if (tiempo.horas === 2) {
+    if (tiempo.minutos === 15) {
+      const ledsRef = ref(db, 'sensor');
+      set(ledsRef, "1");
+      setTimeout(() => set(ledsRef, "0"), 10000);
+    }else if (tiempo.minutos === 30){
+      const ledsRef = ref(db, 'sensor');
+      set(ledsRef, "1");
+      setTimeout(() => set(ledsRef, "0"), 10000);
+    }else if(tiempo.minutos === 45){
       const ledsRef = ref(db, 'sensor');
       set(ledsRef, "1");
       setTimeout(() => set(ledsRef, "0"), 10000);
     }
-  }, [tiempo.horas]);
+  }, [tiempo.minutos]);
 
   useEffect(() => {
     if (tiempo.segundos === 30 || tiempo.segundos === 59) {
