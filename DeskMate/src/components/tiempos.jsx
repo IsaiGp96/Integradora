@@ -42,30 +42,30 @@ const Tiempo = ({
   useEffect(() => {
     if (tiempo.minutos === 15) {
       const ledsRef = ref(db, 'sensor');
-      set(ledsRef, "1");
-      setTimeout(() => set(ledsRef, "0"), 10000);
+      set(ledsRef, 1);
+      setTimeout(() => set(ledsRef, 0), 10000);
     }else if (tiempo.minutos === 30){
       const ledsRef = ref(db, 'sensor');
-      set(ledsRef, "1");
-      setTimeout(() => set(ledsRef, "0"), 10000);
+      set(ledsRef, 1);
+      setTimeout(() => set(ledsRef, 0), 10000);
     }else if(tiempo.minutos === 45){
       const ledsRef = ref(db, 'sensor');
-      set(ledsRef, "1");
-      setTimeout(() => set(ledsRef, "0"), 10000);
+      set(ledsRef, 1);
+      setTimeout(() => set(ledsRef, 0), 10000);
     }
   }, [tiempo.minutos]);
 
-  useEffect(() => {
-    if (tiempo.segundos === 30 || tiempo.segundos === 59) {
-      const timeRef = ref(db, 'alerta');
-      set(timeRef, valor);
-      valor = valor + 1;
-      if (valor == 5) {
-        valor = 3;
-      }
-      setTimeout(() => set(timeRef, "0"), 5000);
-    }
-  }, [tiempo.segundos]);
+  // useEffect(() => {
+  //   if (tiempo.segundos === 30 || tiempo.segundos === 59) {
+  //     const timeRef = ref(db, 'alerta');
+  //     set(timeRef, valor);
+  //     valor = valor + 1;
+  //     if (valor == 5) {
+  //       valor = 3;
+  //     }
+  //     setTimeout(() => set(timeRef, "0"), 5000);
+  //   }
+  // }, [tiempo.segundos]);
 
   useEffect(() => {
     sessions &&

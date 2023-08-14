@@ -6,7 +6,7 @@ const Alert = ({
     const [alertar, setAlertar] = useState(false);
 
     useEffect(() => {
-        if (tiempo.horas === 0 && tiempo.minutos === 15 && tiempo.segundos === 0) {
+        if ((tiempo.horas === 0 && tiempo.minutos === 15 && tiempo.segundos === 0)||(tiempo.horas === 0 && tiempo.minutos === 30 && tiempo.segundos === 0)||(tiempo.horas === 0 && tiempo.minutos === 45 && tiempo.segundos === 0)) {
             setAlertar(true);
             setTimeout(() => {
                 setAlertar(false);
